@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="grid-25">
+        <a>profile</a>
+    </div>
+    <div class="grid-75">
+        <h1>Edit profile: {{ user.username }}!</h1>
+    </div>
+
+    <form method="post">
+  {% csrf_token %}
+  {{ profile_form.as_p }}
+  <button type="submit">Save changes</button>
+</form>
+{% endblock %}

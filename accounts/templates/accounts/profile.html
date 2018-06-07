@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="grid-25">
+        <a href="{% url 'accounts:edit_profile' %}">Edit profile</a>
+        <a href="{% url 'accounts:change_password' %}">Change password</a>
+    </div>
+    <div class="grid-75">
+        <h1>Profile: {{ user.username }}!</h1>
+
+        <ul>
+          <li>First Name: {{ user.profile.first_name}} </li>
+          <li>Last Name: {{ user.profile.last_name}}</li>
+          <li>Email: {{ user.profile.email}}</li>
+          <li>Email: {{ user.profile.confirm_email}}</li>
+          <li>Date of Birth:  {{ user.profile.date_of_birth}}</li>
+          <li>Bio: {{ user.profile.bio}}</li>
+          <!-- {% if user.profile.avatar %} -->
+            <img src="{{ user.profile.avatar.url}}" width='240'>
+          <!-- {% endif %} -->
+          {{ user.profile.avatar }}
+        </ul>
+    </div>
+{% endblock %}
+
+First Name
+Last Name
+Email
+Date of Birth
+Bio
+Avatar
