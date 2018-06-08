@@ -95,3 +95,10 @@ class MyPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(widget=forms.PasswordInput(), validators=[ min_length, password_case, numerical_digits, special_character])
     class Meta:
         model = User
+
+class MyUserCreationForm(UserCreationForm):
+    password1 = forms.CharField(widget=forms.PasswordInput(), validators=[ min_length, password_case, numerical_digits, special_character])
+    password2 = forms.CharField(widget=forms.PasswordInput(), validators=[ min_length, password_case, numerical_digits, special_character])
+    class Meta:
+        model = User
+        fields = ("username",)

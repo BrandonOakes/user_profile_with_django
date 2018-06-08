@@ -14,17 +14,11 @@
           <li>Email: {{ user.profile.confirm_email}}</li>
           <li>Date of Birth:  {{ user.profile.date_of_birth}}</li>
           <li>Bio: {{ user.profile.bio}}</li>
-          <!-- {% if user.profile.avatar %} -->
-            <img src="{{ user.profile.avatar.url}}" width='240'>
-          <!-- {% endif %} -->
-          {{ user.profile.avatar }}
+          {% if user.profile.avatar %}
+            <li>Avatar:<img src="{{ user.profile.avatar.url }}" height="420"></li>
+          {% endif %}
+
+
         </ul>
     </div>
 {% endblock %}
-
-First Name
-Last Name
-Email
-Date of Birth
-Bio
-Avatar

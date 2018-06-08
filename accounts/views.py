@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .forms import ProfileForm, MyPasswordChangeForm
+from .forms import ProfileForm, MyPasswordChangeForm, MyUserCreationForm
 
 
 
@@ -34,9 +34,9 @@ def sign_in(request):
 
 
 def sign_up(request):
-    form = UserCreationForm()
+    form = MyUserCreationForm()
     if request.method == 'POST':
-        form = UserCreationForm(data=request.POST)
+        form = MyUserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
             user = authenticate(
@@ -69,7 +69,7 @@ def profile(request):
 
 def edit_profile(request):
     if request.method == 'POST':
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if profile_form.is_valid():
             profile_form.save()
             messages.success(request, ('Your profile was successfully updated!'))
