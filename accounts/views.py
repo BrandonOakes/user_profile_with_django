@@ -7,8 +7,9 @@ from django.shortcuts import render, redirect
 from .forms import ProfileForm, MyPasswordChangeForm, MyUserCreationForm
 
 
-
 def sign_in(request):
+    """allows user to sign in to profile if they are registered"""
+
     form = AuthenticationForm()
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -34,6 +35,8 @@ def sign_in(request):
 
 
 def sign_up(request):
+    """allows user to register account"""
+
     form = MyUserCreationForm()
     if request.method == 'POST':
         form = MyUserCreationForm(data=request.POST)
@@ -53,21 +56,22 @@ def sign_up(request):
 
 
 def sign_out(request):
+    """allows user to sign out"""
+
     logout(request)
     messages.success(request, "You've been signed out. Come back soon!")
     return HttpResponseRedirect(reverse('home'))
 
 
 def profile(request):
+    """redirects user to there profile page"""
 
     return render(request, 'accounts/profile.html')
 
-# @login_required
-# def edit_profile(request):
-#     return render(request, 'accounts/edit_profile.html')
-
 
 def edit_profile(request):
+    """allows user to edit profile information"""
+
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if profile_form.is_valid():
@@ -75,14 +79,15 @@ def edit_profile(request):
             messages.success(request, ('Your profile was successfully updated!'))
             return HttpResponseRedirect(reverse('accounts:profile'))
         else:
-            messages.error(request,('Please correct the error below.'))
+            messages.error(request, ('Please correct the error below.'))
     else:
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request, 'accounts/edit_profile.html', {'profile_form': profile_form})
 
 
-
 def change_password(request):
+    """allows user to change password"""
+
     form = MyPasswordChangeForm(request.user)
     if request.method == 'POST':
         form = MyPasswordChangeForm(request.user, request.POST)
