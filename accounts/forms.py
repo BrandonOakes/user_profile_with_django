@@ -3,23 +3,22 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from .models import Profile, User
 from django.core import validators
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator
-import pdb
 
 
 class ProfileForm(forms.ModelForm):
     """creates form for user to fill in profile data"""
 
-
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'email', 'confirm_email', 'date_of_birth', 'bio', 'avatar')
+        fields = ('first_name', 'last_name','email', 'confirm_email', 'date_of_birth', 'bio', 'avatar')
 
     def clean_bio(self):
         """validates that bio field is greater than 10 characters"""
 
         bio = self.cleaned_data['bio']
         if len(bio) < 10:
-            raise forms.ValidationError("Bio must contain at least 10 characters")
+            raise forms.ValidationError("""Bio must contain
+                                       at least 10 characters""")
         return bio
 
     def clean(self):
@@ -41,7 +40,8 @@ def min_length(value):
 
 
 def password_case(value):
-    """validates that password has one lower case and one upper case character"""
+    """validates that password has one
+       lower case and one upper case character"""
 
     lowercheck = []
     uppercheck = []
@@ -54,7 +54,8 @@ def password_case(value):
         except TypeError:
             pass
     if len(lowercheck) < 1 or len(uppercheck) < 1:
-        raise forms.ValidationError("Password must contain atleast one upper and lower case letter")
+        raise forms.ValidationError(""""Password must contain atleast
+                                    one upper and lower case letter""")
 
 
 def numerical_digits(value):
@@ -66,7 +67,8 @@ def numerical_digits(value):
         if let in numbers:
             digit_check += '1'
     if len(digit_check) < 1:
-        raise forms.ValidationError("Password must contain atleast one numberical digit")
+        raise forms.ValidationError("""Password must contain atleast
+                                    one numberical digit""")
 
 
 def special_character(value):
@@ -78,7 +80,8 @@ def special_character(value):
         if let in spec_characters:
             character_check += '1'
     if len(character_check) < 1:
-        raise forms.ValidationError("Password must contain atleast one speacial character, example (!, @, #)")
+        raise forms.ValidationError("""Password must contain atleast
+                                  one speacial character, example (!, @, #)""")
 
 
 class MyPasswordChangeForm(PasswordChangeForm):
@@ -90,9 +93,11 @@ class MyPasswordChangeForm(PasswordChangeForm):
 
     old_password = forms.CharField(widget=forms.PasswordInput())
     new_password1 = forms.CharField(widget=forms.PasswordInput(),
-                   validators=[min_length, password_case, numerical_digits, special_character,  UserAttributeSimilarityValidator])
+                   validators=[min_length, password_case, numerical_digits,
+                         special_character,  UserAttributeSimilarityValidator])
     new_password2 = forms.CharField(widget=forms.PasswordInput(),
-                   validators=[min_length, password_case, numerical_digits, special_character, UserAttributeSimilarityValidator])
+                   validators=[min_length, password_case, numerical_digits,
+                          special_character, UserAttributeSimilarityValidator])
 
     class Meta:
         model = User
@@ -104,19 +109,22 @@ class MyPasswordChangeForm(PasswordChangeForm):
         if old_password == new_password1:
             raise forms.ValidationError("New password cant match old password")
         elif self.user.profile.first_name.lower() in new_password1.lower():
-            raise forms.ValidationError("New password cant have your first name in it")
+            raise forms.ValidationError("""New password cant contain
+                                        your first name""")
         elif self.user.profile.last_name.lower() in new_password1.lower():
-            raise forms.ValidationError("New password cant have your last name in it")
+            raise forms.ValidationError("""New password cant contain
+                                       your last name""")
         return new_password1
-
 
 
 class MyUserCreationForm(UserCreationForm):
     """form that creates user and allows user to save password for username"""
     password1 = forms.CharField(widget=forms.PasswordInput(),
-                 validators=[min_length, password_case, numerical_digits, special_character, UserAttributeSimilarityValidator])
+                 validators=[min_length, password_case, numerical_digits,
+                          special_character, UserAttributeSimilarityValidator])
     password2 = forms.CharField(widget=forms.PasswordInput(),
-                 validators=[min_length, password_case, numerical_digits, special_character, UserAttributeSimilarityValidator])
+                 validators=[min_length, password_case, numerical_digits,
+                          special_character, UserAttributeSimilarityValidator])
 
     class Meta:
         model = User
