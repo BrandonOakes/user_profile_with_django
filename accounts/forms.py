@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, Pass
 from .models import Profile, User
 from django.core import validators
 from django.contrib.auth.password_validation import UserAttributeSimilarityValidator
+import pdb
 
 
 class ProfileForm(forms.ModelForm):
@@ -83,14 +84,31 @@ def special_character(value):
 class MyPasswordChangeForm(PasswordChangeForm):
     """form that allows user to change current password"""
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(MyPasswordChangeForm, self).__init__(*args, **kwargs)
+
     old_password = forms.CharField(widget=forms.PasswordInput())
     new_password1 = forms.CharField(widget=forms.PasswordInput(),
-                   validators=[min_length, password_case, numerical_digits, special_character, UserAttributeSimilarityValidator])
+                   validators=[min_length, password_case, numerical_digits, special_character,  UserAttributeSimilarityValidator])
     new_password2 = forms.CharField(widget=forms.PasswordInput(),
                    validators=[min_length, password_case, numerical_digits, special_character, UserAttributeSimilarityValidator])
 
     class Meta:
         model = User
+
+    def clean_new_password1(self):
+        """validates that bio field is greater than 10 characters"""
+        old_password = self.cleaned_data['old_password']
+        new_password1 = self.cleaned_data['new_password1']
+        if old_password == new_password1:
+            raise forms.ValidationError("New password cant match old password")
+        elif self.user.profile.first_name.lower() in new_password1.lower():
+            raise forms.ValidationError("New password cant have your first name in it")
+        elif self.user.profile.last_name.lower() in new_password1.lower():
+            raise forms.ValidationError("New password cant have your last name in it")
+        return new_password1
+
 
 
 class MyUserCreationForm(UserCreationForm):

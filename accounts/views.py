@@ -87,10 +87,9 @@ def edit_profile(request):
 
 def change_password(request):
     """allows user to change password"""
-
     form = MyPasswordChangeForm(request.user)
     if request.method == 'POST':
-        form = MyPasswordChangeForm(request.user, request.POST)
+        form = MyPasswordChangeForm(request.user,  request.POST, user=request.user,)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
