@@ -13,6 +13,9 @@ For this project, you’ll build a form that takes in details about a registered
 **Python** 3.5+ Installation
 **Django** 2.0 Installation
 
+## Resources
+Simpleisbetterthancomplex.com tutorials were utilized for helping create user profile modules
+
 
 ## Steps:
 
